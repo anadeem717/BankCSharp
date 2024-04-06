@@ -1,5 +1,6 @@
 
 namespace BankAccountTests;
+
 public class BankAccountTests
 {
     [Theory]
@@ -48,11 +49,11 @@ public class BankAccountTests
     }
 
     [Fact]
-    public void Withdraw_InsufficientBalance_DoesNotChangeBalance()
+    public void Withdraw_InsufficientBalance_ThrowsInsufficientBalanceException()
     {
         BankAccount account = new BankAccount("John", "Doe", "jdoe", "HelloWorld123!", 100);
 
-        account.Withdraw(110);
-        Assert.Equal(100, account.Balance);
+        var exception = Assert.Throws<InsufficientBalanceException>(() => account.Withdraw(110));
+        Assert.Equal("Withdrawal amount exceeds account balance.", exception.Message);
     }
 }

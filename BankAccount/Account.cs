@@ -1,5 +1,15 @@
 using System.Text;
 
+// Custom exception for insufficient balance scenarios
+public class InsufficientBalanceException : Exception
+{
+    public InsufficientBalanceException() : base() { }
+
+    public InsufficientBalanceException(string message) : base(message) { }
+
+    public InsufficientBalanceException(string message, Exception inner) : base(message, inner) { }
+}
+
 public class BankAccount {
 
     public string FirstName { get; private set; }
@@ -33,11 +43,13 @@ public class BankAccount {
 
     public void Deposit (double amount) { Balance += amount; }
 
-    public void Withdraw (double amount) { 
-        if ((Balance - amount) >= 0) { Balance -= amount; }
-
-        // if user wants to withdraw more than they have as Balance
-        else { Console.WriteLine("\n*****Insufficient Funds.*****\n"); } 
+    public void Withdraw(double amount)
+    {
+        if (amount > Balance)
+        {
+            throw new InsufficientBalanceException("Withdrawal amount exceeds account balance.");
+        }
+        Balance -= amount;
     }
 
     // displays account info for the user's account
